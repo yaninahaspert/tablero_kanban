@@ -1,0 +1,78 @@
+
+ .naranja{
+     background-color: orange;
+ }
+
+.nueva-tarea1{
+    background-color: #fadbd8;
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    border: 0.1rem solid black;
+    border-radius: 0.2rem;
+    padding: 15px;
+    color: black;
+    font-weight: normal;
+    font-size: 15px;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    /* con esto hacemos que el texto baje a la linea de abajo y no se desborde*/
+    word-wrap: break-word;
+
+
+
+}
+.nueva-tarea2{
+    background-color: lightcyan;
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    border: 0.1rem solid black;
+    border-radius: 0.2rem;
+    padding:15px;
+    color: black;
+    font-weight: normal;
+    font-size: 15px;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    /* con esto hacemos que el texto baje a la linea de abajo y no se desborde*/
+    word-wrap: break-word
+}
+.nueva-tarea3{
+    background-color:lightgoldenrodyellow;
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    border: 0.1rem solid black;
+    border-radius: 0.2rem;
+    padding:15px;
+    color: black;
+    font-weight: normal;
+    font-size: 15px;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    /* con esto hacemos que el texto baje a la linea de abajo y no se desborde*/
+    word-wrap: break-word;
+
+}
+.titulo_cajas{
+    background-color:  #d4e6f1 ;
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    border: 0.1rem solid black;
+    border-radius: 0.2rem;
+    padding: 0.5rem 0.2rem 0.5rem 2rem;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+.posicion{
+    float: right;
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+
+}
+.active{
+    background-color: red;
+}
+.caja2 {
+    width: 300px;
+    height: 500px;
+}
