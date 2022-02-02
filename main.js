@@ -1,5 +1,6 @@
 let draggable;
 let objetoMovido;
+let editando;
 
 document.addEventListener('DOMContentLoaded', () => {
     crearDB();
@@ -41,6 +42,7 @@ let homeworkObj = {
 function agregarEventListenerABotonAgregar(DB) {
     document.getElementById("botonAgregar").addEventListener("click", function (e) {
         e.preventDefault()
+
         homeworkObj.homework = document.getElementById("tareas").value.trim();
         homeworkObj.description = document.getElementById("descripcion").value.trim();
 
@@ -54,12 +56,9 @@ function agregarEventListenerABotonAgregar(DB) {
             homeworkObj.estado = "3"
         }
 
-        homeworkObj.id = Date.now();
-
         if (validarCampos(homeworkObj)) {
             agregarTarea(homeworkObj, DB)
             limpiarFormulario()
-            imprimirAlerta("Tarea agregada exitósamente",)
         } else {
             imprimirAlerta("Todos los campos son obligatorios", 'error')
         }
@@ -124,24 +123,42 @@ function imprimirAlerta(mensaje, tipo) {
     }, 3000);
 }
 
+
 function agregarTarea(homeworkObj, DB) {
+    if (editando) {
+        const transaction = DB.transaction(['kanban'], 'readwrite');
+        const objectStore = transaction.objectStore('kanban');
 
-    const transaction = DB.transaction(['kanban'], 'readwrite');
-    const objectStore = transaction.objectStore('kanban');
-    objectStore.put(homeworkObj);
+        objectStore.put(homeworkObj);
 
-    transaction.oncomplete = () => {
-        console.log('tarea Agregado');
-        imprimirHTML(DB);
+        transaction.oncomplete = () => {
+            imprimirHTML(DB)
+            imprimirAlerta("Editado Correctamente")
+            document.getElementById("botonAgregar").textContent = 'AGREGAR';
+            editando = false;
+        }
 
-    };
+        transaction.onerror = () => {
+            console.log('Hubo un errorr.')
+        }
+    } else {
+        homeworkObj.id = Date.now();
 
-    transaction.onerror = (e) => {
-        console.log('Hubo un error!');
-        imprimirAlerta('Hubo un Error', 'error');
-    };
+        const transaction = DB.transaction(['kanban'], 'readwrite');
+
+        const objectStore = transaction.objectStore('kanban');
+        objectStore.put(homeworkObj);
+
+        transaction.oncomplete = () => {
+            console.log('tarea Agregado');
+            imprimirHTML(DB);
+        };
+        transaction.onerror = (e) => {
+            console.log('Hubo un error!');
+            imprimirAlerta('Hubo un Error', 'error');
+        };
+    }
 }
-
 
 function imprimirHTML(DB) {
     limpiarCaja1()
@@ -167,7 +184,6 @@ function imprimirHTML(DB) {
         elemento.appendChild(texto);
         elemento.addEventListener("dragstart", dragStart);
         elemento.addEventListener("dragend", dragEnd);
-
 
         function dragStart() {
             objetoMovido = tarea;
@@ -206,11 +222,8 @@ function imprimirHTML(DB) {
         elemento.appendChild(editar)
 
         editar.onclick = () => {
-            document.getElementById('botonAgregar').style.display = 'none';
-            document.getElementById('botonEditar').style.display = '';
-            rellenarFormulario(id, DB)
+            editarTarea(tarea)
         }
-
         cursor.continue();
     }
 }
@@ -244,49 +257,21 @@ function eliminarHomework(id, DB) {
     limpiarCaja1()
     limpiarCaja2()
     limpiarCaja3()
+
 }
 
+function editarTarea(datos) {
+    const {homework, description, estado, id} = datos;
 
-function obtenerObjetoDesdeFormulario() {
-    return {
-        homework: document.getElementById('tareas').value.trim(),
-        description: document.getElementById('descripcion').value.trim(),
-        estado: document.getElementById('mySelect').value,
+    homeworkObj.id = id;
 
-    }
-}
+    document.querySelector('#tareas').value = homework;
+    document.querySelector('#descripcion').value = description;
+    document.querySelector("#mySelect").value = estado;
 
-function rellenarFormulario(id, DB) {
+    document.getElementById("botonAgregar").innerText = 'Editar';
 
-    let transaction = DB.transaction(["kanban"], "readonly");
-    let objectStore = transaction.objectStore("kanban");
-    const tarea = objectStore.openCursor()
-    tarea.onsuccess = (e) => {
-        const cursor = e.target.result
-        if (cursor) {
-            if (cursor.value.id === Number(id)) {
-                llenarFormulario(cursor.value)
-            }
-            cursor.continue()
-        }
-    };
-
-    document.getElementById("botonEditar").addEventListener('click', (e) => {
-        e.preventDefault();
-
-        let homeworkActualizado = obtenerObjetoDesdeFormulario();
-        homeworkActualizado.id = id
-
-        if (validarCampos(homeworkActualizado)) {
-            actualizarHomeworkEnDB(homeworkActualizado, DB)
-            limpiarFormulario()
-            imprimirAlerta("Tarea editada exitósamente",)
-            document.getElementById('botonAgregar').style.display = '';
-            document.getElementById('botonEditar').style.display = 'displey';
-        } else {
-            imprimirAlerta("mal", 'error')
-        }
-    })
+    editando = true;
 }
 
 function actualizarHomeworkEnDB(homeworkActualizado, DB) {
@@ -300,12 +285,4 @@ function actualizarHomeworkEnDB(homeworkActualizado, DB) {
     transaction.onerror = (e) => {
         console.log('Hubo un error!');
     };
-}
-
-function llenarFormulario(datos) {
-    console.log(datos)
-    document.querySelector('#tareas').value = datos.homework;
-    document.querySelector('#descripcion').value = datos.description;
-    document.querySelector("#mySelect").value = datos.description;
-
 }
