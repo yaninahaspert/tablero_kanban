@@ -286,3 +286,13 @@ function actualizarHomeworkEnDB(homeworkActualizado, DB) {
         console.log('Hubo un error!');
     };
 }
+
+     /*   fetch(`https://kanban-a332.restdb.io/rest/tasks/{this.id} `)
+
+            .then( respuesta => respuesta.json())
+            .then(resultado => {
+
+            })
+            .catch(error => console.log(error))
+
+*/
