@@ -296,3 +296,10 @@ function actualizarHomeworkEnDB(homeworkActualizado, DB) {
             .catch(error => console.log(error))
 
 */
+if ("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js")
+        .then(registrado=> console.log("se instalo corectamnete", registrado))
+        .catch(error=>console.log("fallo la instalacion", error));
+}else{
+    console.log("service worker no soportado")
+}
