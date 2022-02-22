@@ -287,17 +287,10 @@ function actualizarHomeworkEnDB(homeworkActualizado, DB) {
     };
 }
 
-     /*   fetch(`https://kanban-a332.restdb.io/rest/tasks/{this.id} `)
+//-------------------------Appication Working Progresive (PWA)----------------
 
-            .then( respuesta => respuesta.json())
-            .then(resultado => {
-
-            })
-            .catch(error => console.log(error))
-
-*/
 if ("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js")
+    navigator.serviceWorker.register("/tableroKanban/js/sw.js")
         .then(registrado=> console.log("se instalo corectamnete", registrado))
         .catch(error=>console.log("fallo la instalacion", error));
 }else{
