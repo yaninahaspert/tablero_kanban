@@ -1,8 +1,8 @@
 
 const CACHE_NAME = 'v1_cache',
     urlsToCache = [
-        'http://localhost:63342/tableroKanban/js/sw.js',
-        'http://localhost:63342/tableroKanban/js/main.js',
+        '/tablero_kanban/js/sw.js',
+        '/tablero_kanban/js/main.js',
     ]
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos

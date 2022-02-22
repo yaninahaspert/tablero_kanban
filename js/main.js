@@ -290,7 +290,7 @@ function actualizarHomeworkEnDB(homeworkActualizado, DB) {
 //-------------------------Appication Working Progresive (PWA)----------------
 
 if ("serviceWorker" in navigator){
-    navigator.serviceWorker.register("/tableroKanban/js/sw.js")
+    navigator.serviceWorker.register("/tablero_kanban/js/sw.js")
         .then(registrado=> console.log("se instalo corectamnete", registrado))
         .catch(error=>console.log("fallo la instalacion", error));
 }else{
